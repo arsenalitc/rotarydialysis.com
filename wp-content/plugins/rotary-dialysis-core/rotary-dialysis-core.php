@@ -156,6 +156,12 @@ final class Rotary_Dialysis_Core {
 }
 
 /**
+ * Load activator/deactivator classes before registering hooks
+ */
+require_once RDC_PLUGIN_DIR . 'includes/class-rdc-activator.php';
+require_once RDC_PLUGIN_DIR . 'includes/class-rdc-deactivator.php';
+
+/**
  * Activation hook
  */
 register_activation_hook(__FILE__, array('RDC_Activator', 'activate'));
