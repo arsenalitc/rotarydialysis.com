@@ -71,6 +71,7 @@ final class Rotary_Dialysis_Core {
         require_once RDC_PLUGIN_DIR . 'includes/services/class-rdc-availability-service.php';
         require_once RDC_PLUGIN_DIR . 'includes/services/class-rdc-appointment-service.php';
         require_once RDC_PLUGIN_DIR . 'includes/services/class-rdc-email-service.php';
+        require_once RDC_PLUGIN_DIR . 'includes/services/class-rdc-document-service.php';
 
         // Post Types
         require_once RDC_PLUGIN_DIR . 'includes/class-rdc-doctor-post-type.php';

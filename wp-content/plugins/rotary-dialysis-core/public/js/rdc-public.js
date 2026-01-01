@@ -188,4 +188,63 @@
         '</style>');
     }
 
+    // Tabs functionality
+    $(document).on('click', '.rdc-tab-btn', function(e) {
+        e.preventDefault();
+
+        var $btn = $(this);
+        var $tabs = $btn.closest('.rdc-tabs');
+        var tabId = $btn.data('tab');
+
+        // Update active button
+        $tabs.find('.rdc-tab-btn').removeClass('active');
+        $btn.addClass('active');
+
+        // Update active content
+        $tabs.find('.rdc-tab-content').removeClass('active');
+        $tabs.find('.rdc-tab-content[data-tab="' + tabId + '"]').addClass('active');
+
+        // Update URL hash for bookmarking
+        if (history.replaceState) {
+            history.replaceState(null, null, '#' + tabId);
+        }
+    });
+
+    // Handle direct link to tab via hash
+    $(document).ready(function() {
+        if (window.location.hash) {
+            var tabId = window.location.hash.substring(1);
+            var $tabBtn = $('.rdc-tab-btn[data-tab="' + tabId + '"]');
+            if ($tabBtn.length) {
+                $tabBtn.trigger('click');
+            }
+        }
+
+        // Smooth scroll to sections
+        $('a[href^="#"]').on('click', function(e) {
+            var target = $(this.getAttribute('href'));
+            if (target.length) {
+                e.preventDefault();
+                $('html, body').animate({
+                    scrollTop: target.offset().top - 100
+                }, 500);
+            }
+        });
+    });
+
+    // Star rating input
+    $(document).on('click', '.rdc-star-input label', function() {
+        var $label = $(this);
+        var $container = $label.closest('.rdc-star-input');
+
+        // Update visual state
+        $container.find('label').removeClass('active');
+        $label.addClass('active').prevAll('label').addClass('active');
+    });
+
+    // Initialize star rating visual state on page load
+    $('.rdc-star-input input:checked').each(function() {
+        $(this).next('label').addClass('active').prevAll('label').addClass('active');
+    });
+
 })(jQuery);

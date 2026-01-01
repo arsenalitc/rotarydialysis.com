@@ -23,6 +23,7 @@ class RDC_Shortcodes {
         add_shortcode('rdc_documents', array($this, 'documents_list'));
         add_shortcode('rdc_center_info', array($this, 'center_info'));
         add_shortcode('rdc_doctors', array($this, 'doctors_list'));
+        add_shortcode('rdc_center_detail', array($this, 'center_detail'));
     }
 
     /**
@@ -249,5 +250,59 @@ class RDC_Shortcodes {
         ob_start();
         include RDC_PLUGIN_DIR . 'templates/doctors-list.php';
         return ob_get_clean();
+    }
+
+    /**
+     * Center detail page
+     * [rdc_center_detail store_id="1"]
+     */
+    public function center_detail($atts) {
+        $atts = shortcode_atts(array(
+            'store_id' => 0,
+        ), $atts);
+
+        $store_id = absint($atts['store_id']);
+
+        if (!$store_id) {
+            // Try to get store_id from URL parameter
+            $store_id = isset($_GET['center_id']) ? absint($_GET['center_id']) : 0;
+        }
+
+        if (!$store_id) {
+            return '<p class="rdc-error">' . esc_html__('Please specify a dialysis center.', 'rotary-dialysis-core') . '</p>';
+        }
+
+        $store = RDC_ASL_Integration::get_enhanced_store($store_id);
+
+        if (!$store) {
+            return '<p class="rdc-error">' . esc_html__('Dialysis center not found.', 'rotary-dialysis-core') . '</p>';
+        }
+
+        // Get additional data
+        $shifts = RDC_Appointment_Service::get_shifts($store_id);
+        $center_meta = $this->get_center_meta($store_id);
+
+        ob_start();
+        include RDC_PLUGIN_DIR . 'templates/center-detail.php';
+        return ob_get_clean();
+    }
+
+    /**
+     * Get center meta data
+     */
+    private function get_center_meta($store_id) {
+        global $wpdb;
+
+        $meta = array();
+        $results = $wpdb->get_results($wpdb->prepare(
+            "SELECT meta_key, meta_value FROM {$wpdb->prefix}rdc_center_meta WHERE store_id = %d",
+            $store_id
+        ));
+
+        foreach ($results as $row) {
+            $meta[$row->meta_key] = maybe_unserialize($row->meta_value);
+        }
+
+        return $meta;
     }
 }
