@@ -1,0 +1,30 @@
+# Environment and credentials
+.env
+.env.local
+.env.*.local
+
+# WordPress sensitive files
+wp-config.php
+
+# Node
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+debug.log
+
+# Cache
+.cache/
+
+# Large backup files (store separately)
+*.wpress
