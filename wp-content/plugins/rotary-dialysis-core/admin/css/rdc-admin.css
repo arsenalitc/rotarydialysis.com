@@ -248,6 +248,212 @@
     margin-top: 0;
 }
 
+/* Gallery Page */
+.rdc-gallery-page h1 {
+    margin-bottom: 20px;
+}
+
+.rdc-gallery-header {
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.rdc-gallery-header form {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.rdc-gallery-header label {
+    font-weight: 600;
+}
+
+.rdc-store-select {
+    min-width: 300px;
+}
+
+.rdc-gallery-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.rdc-gallery-toolbar .button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.rdc-gallery-count {
+    color: #50575e;
+}
+
+.rdc-gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.rdc-gallery-item {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+}
+
+.rdc-gallery-item:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.rdc-gallery-item--featured {
+    border-color: #F7A81B;
+    border-width: 2px;
+}
+
+.rdc-gallery-item-image {
+    position: relative;
+    aspect-ratio: 4/3;
+    background: #f0f0f1;
+}
+
+.rdc-gallery-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.rdc-gallery-featured-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    padding: 4px 8px;
+    background: #F7A81B;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.rdc-gallery-item-info {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.rdc-gallery-title {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.rdc-gallery-title:focus {
+    border-color: #2271b1;
+    outline: none;
+}
+
+.rdc-gallery-item-actions {
+    display: flex;
+    gap: 4px;
+    padding: 8px;
+    background: #f9f9f9;
+}
+
+.rdc-gallery-item-actions .button {
+    flex: 1;
+    padding: 4px 8px;
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rdc-gallery-item-actions .dashicons {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+}
+
+.rdc-gallery-item-actions .rdc-set-featured .dashicons-star-filled {
+    color: #F7A81B;
+}
+
+.rdc-gallery-item-actions .rdc-delete-image .dashicons {
+    color: #d63638;
+}
+
+.rdc-gallery-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    background: #f0f0f1;
+    border-radius: 8px;
+}
+
+.rdc-gallery-empty .dashicons {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: #c3c4c7;
+    margin-bottom: 16px;
+}
+
+.rdc-gallery-empty p {
+    margin: 8px 0;
+    color: #50575e;
+}
+
+.rdc-gallery-notice {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px;
+    background: #f0f6fc;
+    border: 1px solid #72aee6;
+    border-radius: 4px;
+}
+
+.rdc-gallery-notice .dashicons {
+    color: #2271b1;
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+}
+
+.rdc-gallery-notice p {
+    margin: 0;
+}
+
+.rdc-gallery-help {
+    margin-top: 30px;
+    padding: 20px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.rdc-gallery-help h3 {
+    margin: 0 0 12px;
+    font-size: 14px;
+}
+
+.rdc-gallery-help ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.rdc-gallery-help li {
+    margin-bottom: 8px;
+    color: #50575e;
+}
+
 /* Responsive */
 @media (max-width: 782px) {
     .rdc-stats-grid {
@@ -261,5 +467,30 @@
     .rdc-availability-info {
         flex-direction: column;
         gap: 10px;
+    }
+
+    .rdc-gallery-header form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .rdc-store-select {
+        min-width: 100%;
+    }
+
+    .rdc-gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .rdc-gallery-toolbar {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+    }
+}
+
+@media (max-width: 480px) {
+    .rdc-gallery-grid {
+        grid-template-columns: 1fr;
     }
 }

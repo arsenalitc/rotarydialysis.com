@@ -18,6 +18,49 @@ class RDC_Gallery_Controller extends RDC_REST_Controller {
      * Register routes
      */
     public function register_routes() {
+        // Direct gallery image operations (for admin)
+        register_rest_route($this->namespace, '/gallery/(?P<image_id>[\d]+)', array(
+            array(
+                'methods' => WP_REST_Server::EDITABLE,
+                'callback' => array($this, 'update_item_direct'),
+                'permission_callback' => array($this, 'update_item_direct_permissions_check'),
+                'args' => array(
+                    'image_id' => array(
+                        'required' => true,
+                        'type' => 'integer',
+                        'sanitize_callback' => 'absint',
+                    ),
+                    'title' => array(
+                        'type' => 'string',
+                        'sanitize_callback' => 'sanitize_text_field',
+                    ),
+                    'caption' => array(
+                        'type' => 'string',
+                        'sanitize_callback' => 'sanitize_textarea_field',
+                    ),
+                    'sort_order' => array(
+                        'type' => 'integer',
+                        'sanitize_callback' => 'absint',
+                    ),
+                    'is_featured' => array(
+                        'type' => 'boolean',
+                    ),
+                ),
+            ),
+            array(
+                'methods' => WP_REST_Server::DELETABLE,
+                'callback' => array($this, 'delete_item_direct'),
+                'permission_callback' => array($this, 'delete_item_direct_permissions_check'),
+                'args' => array(
+                    'image_id' => array(
+                        'required' => true,
+                        'type' => 'integer',
+                        'sanitize_callback' => 'absint',
+                    ),
+                ),
+            ),
+        ));
+
         // GET/POST gallery images for a center
         register_rest_route($this->namespace, '/' . $this->rest_base, array(
             array(
@@ -218,5 +261,56 @@ class RDC_Gallery_Controller extends RDC_REST_Controller {
     public function delete_item_permissions_check($request) {
         $store_id = $request->get_param('store_id');
         return $this->can_manage_center($store_id);
+    }
+
+    /**
+     * Update gallery image (direct route)
+     */
+    public function update_item_direct($request) {
+        $image_id = $request->get_param('image_id');
+
+        $data = array();
+        foreach (array('title', 'caption', 'sort_order', 'is_featured') as $field) {
+            if ($request->has_param($field)) {
+                $data[$field] = $request->get_param($field);
+            }
+        }
+
+        $result = RDC_Gallery_Service::update_image($image_id, $data);
+
+        if (is_wp_error($result)) {
+            return $result;
+        }
+
+        return $this->success_response(array('success' => true));
+    }
+
+    /**
+     * Delete gallery image (direct route)
+     */
+    public function delete_item_direct($request) {
+        $image_id = $request->get_param('image_id');
+
+        $result = RDC_Gallery_Service::delete_image($image_id);
+
+        if (!$result) {
+            return $this->error_response(__('Failed to delete image.', 'rotary-dialysis-core'));
+        }
+
+        return $this->success_response(array('success' => true));
+    }
+
+    /**
+     * Permission check for direct update
+     */
+    public function update_item_direct_permissions_check($request) {
+        return current_user_can('rdc_manage_gallery') || current_user_can('manage_options');
+    }
+
+    /**
+     * Permission check for direct delete
+     */
+    public function delete_item_direct_permissions_check($request) {
+        return current_user_can('rdc_manage_gallery') || current_user_can('manage_options');
     }
 }

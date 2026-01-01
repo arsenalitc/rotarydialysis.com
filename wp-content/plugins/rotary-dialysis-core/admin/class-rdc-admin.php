@@ -66,6 +66,16 @@ class RDC_Admin {
             array($this, 'render_appointments_page')
         );
 
+        // Gallery submenu
+        add_submenu_page(
+            'rotary-dialysis',
+            __('Gallery', 'rotary-dialysis-core'),
+            __('Gallery', 'rotary-dialysis-core'),
+            'rdc_manage_gallery',
+            'rdc-gallery',
+            array($this, 'render_gallery_page')
+        );
+
         // Documents submenu
         add_submenu_page(
             'rotary-dialysis',
@@ -314,6 +324,11 @@ class RDC_Admin {
             return;
         }
 
+        // Enqueue media uploader on gallery page
+        if (strpos($hook, 'rdc-gallery') !== false) {
+            wp_enqueue_media();
+        }
+
         wp_enqueue_script(
             'rdc-admin',
             RDC_PLUGIN_URL . 'admin/js/rdc-admin.js',
@@ -331,6 +346,10 @@ class RDC_Admin {
                 'saving' => __('Saving...', 'rotary-dialysis-core'),
                 'saved' => __('Saved!', 'rotary-dialysis-core'),
                 'error' => __('An error occurred.', 'rotary-dialysis-core'),
+                'selectImages' => __('Select Images', 'rotary-dialysis-core'),
+                'addToGallery' => __('Add to Gallery', 'rotary-dialysis-core'),
+                'setFeatured' => __('Set as Featured', 'rotary-dialysis-core'),
+                'removeFromGallery' => __('Remove from Gallery', 'rotary-dialysis-core'),
             ),
         ));
     }
@@ -356,6 +375,10 @@ class RDC_Admin {
 
     public function render_documents_page() {
         include RDC_PLUGIN_DIR . 'admin/partials/documents.php';
+    }
+
+    public function render_gallery_page() {
+        include RDC_PLUGIN_DIR . 'admin/partials/gallery.php';
     }
 
     public function render_settings_page() {
