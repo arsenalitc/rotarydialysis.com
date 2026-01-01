@@ -22,6 +22,7 @@ class RDC_Shortcodes {
         add_shortcode('rdc_gallery', array($this, 'gallery'));
         add_shortcode('rdc_documents', array($this, 'documents_list'));
         add_shortcode('rdc_center_info', array($this, 'center_info'));
+        add_shortcode('rdc_doctors', array($this, 'doctors_list'));
     }
 
     /**
@@ -217,6 +218,36 @@ class RDC_Shortcodes {
 
         ob_start();
         include RDC_PLUGIN_DIR . 'templates/center-info.php';
+        return ob_get_clean();
+    }
+
+    /**
+     * Doctors list
+     * [rdc_doctors store_id="1" columns="3"]
+     */
+    public function doctors_list($atts) {
+        $atts = shortcode_atts(array(
+            'store_id' => 0,
+            'columns' => 3,
+            'show_availability' => 'yes',
+        ), $atts);
+
+        $store_id = absint($atts['store_id']);
+        $columns = absint($atts['columns']);
+        $show_availability = $atts['show_availability'] === 'yes';
+
+        if (!$store_id) {
+            return '';
+        }
+
+        $doctors = RDC_Doctor_Post_Type::get_doctors_for_store($store_id);
+
+        if (empty($doctors)) {
+            return '<p class="rdc-no-doctors">' . esc_html__('No doctors listed for this center.', 'rotary-dialysis-core') . '</p>';
+        }
+
+        ob_start();
+        include RDC_PLUGIN_DIR . 'templates/doctors-list.php';
         return ob_get_clean();
     }
 }

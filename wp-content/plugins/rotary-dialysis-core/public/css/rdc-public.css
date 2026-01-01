@@ -525,3 +525,146 @@
     opacity: 0.6;
     pointer-events: none;
 }
+
+/* Doctors */
+.rdc-doctors-grid {
+    display: grid;
+    gap: 20px;
+}
+
+.rdc-doctors-grid[data-columns="2"] { grid-template-columns: repeat(2, 1fr); }
+.rdc-doctors-grid[data-columns="3"] { grid-template-columns: repeat(3, 1fr); }
+.rdc-doctors-grid[data-columns="4"] { grid-template-columns: repeat(4, 1fr); }
+
+.rdc-doctor-card {
+    background: #fff;
+    border: 1px solid var(--rdc-border);
+    border-radius: var(--rdc-radius);
+    overflow: hidden;
+    transition: box-shadow 0.2s ease;
+}
+
+.rdc-doctor-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.rdc-doctor-card--primary {
+    border-color: var(--rdc-primary);
+    border-width: 2px;
+}
+
+.rdc-doctor-photo {
+    position: relative;
+    height: 200px;
+    background: #f3f4f6;
+}
+
+.rdc-doctor-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.rdc-doctor-photo--placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rdc-doctor-photo--placeholder .dashicons {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: #d1d5db;
+}
+
+.rdc-doctor-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 4px 10px;
+    background: var(--rdc-primary);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.rdc-doctor-info {
+    padding: 16px;
+}
+
+.rdc-doctor-name {
+    margin: 0 0 8px;
+    font-size: 18px;
+    color: var(--rdc-text);
+}
+
+.rdc-doctor-specialization {
+    margin: 0 0 4px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--rdc-primary);
+}
+
+.rdc-doctor-qualifications {
+    margin: 0 0 8px;
+    font-size: 13px;
+    color: var(--rdc-text-muted);
+}
+
+.rdc-doctor-experience {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 8px;
+    font-size: 13px;
+    color: var(--rdc-text-muted);
+}
+
+.rdc-doctor-experience .dashicons {
+    color: var(--rdc-rotary-gold);
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+.rdc-doctor-availability {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--rdc-border);
+    font-size: 13px;
+}
+
+.rdc-doctor-availability small {
+    color: var(--rdc-text-muted);
+}
+
+.rdc-doctor-days {
+    color: var(--rdc-text);
+    font-weight: 500;
+}
+
+.rdc-no-doctors {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--rdc-text-muted);
+    background: #f9fafb;
+    border-radius: var(--rdc-radius);
+}
+
+@media (max-width: 768px) {
+    .rdc-doctors-grid[data-columns="3"],
+    .rdc-doctors-grid[data-columns="4"] {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .rdc-doctors-grid[data-columns="2"],
+    .rdc-doctors-grid[data-columns="3"],
+    .rdc-doctors-grid[data-columns="4"] {
+        grid-template-columns: 1fr;
+    }
+}
