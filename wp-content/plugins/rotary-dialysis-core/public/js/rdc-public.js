@@ -247,4 +247,76 @@
         $(this).next('label').addClass('active').prevAll('label').addClass('active');
     });
 
+    // Counter animation for stats
+    function initCounters() {
+        var counters = document.querySelectorAll('.rdc-stat-counter');
+        if (!counters.length) return;
+
+        var observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.5
+        };
+
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    var counter = entry.target;
+                    if (!counter.classList.contains('counted')) {
+                        animateCounter(counter);
+                        counter.classList.add('counted');
+                    }
+                }
+            });
+        }, observerOptions);
+
+        counters.forEach(function(counter) {
+            observer.observe(counter);
+        });
+    }
+
+    function animateCounter(counterEl) {
+        var target = parseInt(counterEl.dataset.target) || 0;
+        var numberEl = counterEl.querySelector('.rdc-stat-number');
+        var duration = 2000; // 2 seconds
+        var startTime = null;
+        var startValue = 0;
+
+        function easeOutCubic(t) {
+            return 1 - Math.pow(1 - t, 3);
+        }
+
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+            }
+            if (num >= 1000) {
+                return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+            }
+            return num.toLocaleString();
+        }
+
+        function animate(currentTime) {
+            if (!startTime) startTime = currentTime;
+            var progress = Math.min((currentTime - startTime) / duration, 1);
+            var easedProgress = easeOutCubic(progress);
+            var currentValue = Math.floor(startValue + (target - startValue) * easedProgress);
+
+            numberEl.textContent = formatNumber(currentValue);
+
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            } else {
+                numberEl.textContent = formatNumber(target);
+            }
+        }
+
+        requestAnimationFrame(animate);
+    }
+
+    // Initialize counters when DOM is ready
+    $(document).ready(function() {
+        initCounters();
+    });
+
 })(jQuery);

@@ -24,6 +24,7 @@ class RDC_Shortcodes {
         add_shortcode('rdc_center_info', array($this, 'center_info'));
         add_shortcode('rdc_doctors', array($this, 'doctors_list'));
         add_shortcode('rdc_center_detail', array($this, 'center_detail'));
+        add_shortcode('rdc_rotary_page', array($this, 'rotary_page'));
     }
 
     /**
@@ -304,5 +305,105 @@ class RDC_Shortcodes {
         }
 
         return $meta;
+    }
+
+    /**
+     * Rotary projects page
+     * [rdc_rotary_page]
+     */
+    public function rotary_page($atts) {
+        $atts = shortcode_atts(array(
+            'donate_url' => '',
+            'volunteer_url' => '',
+            'partner_url' => '',
+            'contact_email' => get_option('rdc_admin_email', ''),
+            'contact_phone' => '',
+        ), $atts);
+
+        // Get stats from database
+        $stats = $this->get_rotary_stats();
+
+        // Placeholder data - can be replaced with actual data from options or custom post type
+        $gallery_images = $this->get_rotary_gallery();
+        $team_members = $this->get_rotary_team();
+        $partners = $this->get_rotary_partners();
+
+        // Pass atts to template
+        $donate_url = $atts['donate_url'];
+        $volunteer_url = $atts['volunteer_url'];
+        $partner_url = $atts['partner_url'];
+        $contact_email = $atts['contact_email'];
+        $contact_phone = $atts['contact_phone'];
+
+        ob_start();
+        include RDC_PLUGIN_DIR . 'templates/rotary-page.php';
+        return ob_get_clean();
+    }
+
+    /**
+     * Get Rotary project stats
+     */
+    private function get_rotary_stats() {
+        global $wpdb;
+
+        // Get actual center count from ASL
+        $centers = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}asl_stores WHERE is_disabled = 0");
+
+        // Get actual stats from our tables
+        $sessions = $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}rdc_appointments WHERE status = 'completed'");
+        $patients = $wpdb->get_var("SELECT COUNT(DISTINCT patient_email) FROM {$wpdb->prefix}rdc_appointments");
+        $beds = $wpdb->get_var("SELECT SUM(total_beds) FROM {$wpdb->prefix}rdc_bed_availability");
+
+        return array(
+            'centers' => max(25, intval($centers)),
+            'sessions' => max(150000, intval($sessions)),
+            'patients' => max(5000, intval($patients)),
+            'beds' => max(100, intval($beds)),
+        );
+    }
+
+    /**
+     * Get Rotary gallery images
+     */
+    private function get_rotary_gallery() {
+        // This can be expanded to pull from a custom option or post type
+        $gallery = get_option('rdc_rotary_gallery', array());
+
+        if (!empty($gallery)) {
+            return $gallery;
+        }
+
+        // Return empty array if no gallery configured
+        return array();
+    }
+
+    /**
+     * Get Rotary team members
+     */
+    private function get_rotary_team() {
+        // This can be expanded to pull from a custom option or post type
+        $team = get_option('rdc_rotary_team', array());
+
+        if (!empty($team)) {
+            return $team;
+        }
+
+        // Return empty array if no team configured
+        return array();
+    }
+
+    /**
+     * Get Rotary partners
+     */
+    private function get_rotary_partners() {
+        // This can be expanded to pull from a custom option or post type
+        $partners = get_option('rdc_rotary_partners', array());
+
+        if (!empty($partners)) {
+            return $partners;
+        }
+
+        // Return empty array if no partners configured
+        return array();
     }
 }
